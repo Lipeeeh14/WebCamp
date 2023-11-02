@@ -19,5 +19,7 @@
 		{
 			Nome = nome;
 		}
+
+		public void AtualizarNome(string nome) => Nome = nome;
 	}
 }

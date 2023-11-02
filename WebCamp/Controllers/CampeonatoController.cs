@@ -19,12 +19,33 @@ namespace WebCamp.Controllers
 		}
 
 		[HttpGet]
+		[Route("tipos")]
+		public IActionResult ObterTiposCampeonato() =>
+			Ok(_campeonatoService.ObterTiposCampeonato());
+
+		[HttpGet]
+		public async Task<IActionResult> ConsultarCampeonatos()
+		{
+			try
+			{
+				return Ok(await _campeonatoService.ConsultarCampeonatos());
+			}
+			catch (Exception)
+			{
+				return BadRequest("Erro ao consultar os campeonatos!");
+			}
+		}
+
+		[HttpGet]
 		[Route("{id}")]
 		public async Task<IActionResult> ObterCampeonatoPorId(long id) 
 		{
 			try
 			{
 				var result = await _campeonatoService.ObterCampeonatoPorId(id);
+
+				if (result == null)
+					return NotFound();
 
 				return Ok(result);
 			}
@@ -80,6 +101,22 @@ namespace WebCamp.Controllers
 			catch (Exception)
 			{
 				return BadRequest("Erro ao deletar o campeonato!");
+			}
+		}
+
+		[HttpPatch]
+		[Route("{id}/finalizar")]
+		public async Task<IActionResult> FinalizarCampeonato(long id) 
+		{
+			try
+			{
+				var result = await _campeonatoService.FinalizarCampeonato(id);
+
+				return Ok(result);
+			}
+			catch (Exception)
+			{
+				return BadRequest("Erro ao finalizar o campeonato!");
 			}
 		}
 	}

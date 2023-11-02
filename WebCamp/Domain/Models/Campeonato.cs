@@ -15,11 +15,17 @@ namespace WebCamp.Domain.Models
 
         public Campeonato() { }
 
-		public Campeonato(string nome, bool ativo, int tipoCampeonatoId)
-			: base(nome)
+		public void AtualizarCampeonato(string nome, bool ativo, int tipoCampeonatoId)
 		{
+			AtualizarNome(nome);
 			Ativo = ativo;
 			TipoCampeonatoId = tipoCampeonatoId;
+		}
+
+		public void FinalizarCampeonato() 
+		{
+			DataFim = DateTime.Now;
+			Ativo = false;
 		}
 	}
 }

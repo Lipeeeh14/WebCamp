@@ -10,6 +10,11 @@ namespace WebCamp.Data.Repositories
 		{
 		}
 
+		public async Task<IEnumerable<Campeonato>> ConsultarCampeonatos()
+		{
+			return await _context.Campeonato.ToListAsync();
+		}
+
 		public async Task<Campeonato?> ObterCampeonatoPorId(long id)
 		{
 			return await _context.Campeonato

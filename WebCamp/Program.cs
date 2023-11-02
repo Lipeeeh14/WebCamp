@@ -1,3 +1,4 @@
+using WebCamp.Configuration.Profiles;
 using WebCamp.Data;
 using WebCamp.Data.Repositories;
 using WebCamp.Data.Repositories.Interfaces;
@@ -14,6 +15,9 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddAutoMapper(typeof(DomainToViewModelProfile));
+builder.Services.AddAutoMapper(typeof(ViewModelToDomainProfile));
 
 builder.Services.AddScoped<ICampeonatoService, CampeonatoService>();
 
