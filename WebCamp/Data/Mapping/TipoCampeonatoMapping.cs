@@ -10,8 +10,6 @@ namespace WebCamp.Data.Mapping
 		{
 			builder.ToTable("TipoCampeonato");
 
-			builder.HasKey(x => x.Id);
-
 			builder.Property(x => x.Nome)
 				.HasMaxLength(40)
 				.IsRequired();

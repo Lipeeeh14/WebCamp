@@ -2,11 +2,15 @@
 {
 	public class TipoCampeonatoEnum : Enumeration
 	{
-		public TipoCampeonatoEnum(long id, string nome) : base(id, nome)
+		public TipoCampeonatoEnum()
 		{
 		}
 
-		public static TipoCampeonatoEnum MataMata = new TipoCampeonatoEnum(1, "Mata-Mata");
-		public static TipoCampeonatoEnum PontosCorridos = new TipoCampeonatoEnum(2, "Pontos Corridos");
+		public TipoCampeonatoEnum(int id, string nome) : base(id, nome)
+		{
+		}
+
+		public static TipoCampeonatoEnum MataMata = new(1, "Mata-Mata");
+		public static TipoCampeonatoEnum PontosCorridos = new(2, "Pontos Corridos");
 	}
 }

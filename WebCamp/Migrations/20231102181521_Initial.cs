@@ -1,5 +1,7 @@
 ﻿using System;
 using Microsoft.EntityFrameworkCore.Migrations;
+using WebCamp.Domain.Enums;
+
 
 #nullable disable
 
@@ -11,23 +13,6 @@ namespace WebCamp.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.CreateTable(
-                name: "Campeonato",
-                columns: table => new
-                {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Ativo = table.Column<bool>(type: "bit", nullable: false),
-                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    TipoCampeonatoId = table.Column<int>(type: "int", nullable: false),
-                    Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Campeonato", x => x.Id);
-                });
-
             migrationBuilder.CreateTable(
                 name: "Time",
                 columns: table => new
@@ -47,20 +32,12 @@ namespace WebCamp.Migrations
                 name: "TipoCampeonato",
                 columns: table => new
                 {
-                    Id = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TipoCampeonatoId = table.Column<long>(type: "bigint", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false),
                     Nome = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TipoCampeonato", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_TipoCampeonato_Campeonato_TipoCampeonatoId",
-                        column: x => x.TipoCampeonatoId,
-                        principalTable: "Campeonato",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -82,6 +59,29 @@ namespace WebCamp.Migrations
                         name: "FK_Atleta_Time_TimeId",
                         column: x => x.TimeId,
                         principalTable: "Time",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Campeonato",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Ativo = table.Column<bool>(type: "bit", nullable: false),
+                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TipoCampeonatoId = table.Column<int>(type: "int", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Campeonato", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Campeonato_TipoCampeonato_TipoCampeonatoId",
+                        column: x => x.TipoCampeonatoId,
+                        principalTable: "TipoCampeonato",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -114,16 +114,20 @@ namespace WebCamp.Migrations
                 column: "TimeId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Campeonato_TipoCampeonatoId",
+                table: "Campeonato",
+                column: "TipoCampeonatoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_CampeonatoTime_CampeonatoId",
                 table: "CampeonatoTime",
                 column: "CampeonatoId");
 
-            migrationBuilder.CreateIndex(
-                name: "IX_TipoCampeonato_TipoCampeonatoId",
-                table: "TipoCampeonato",
-                column: "TipoCampeonatoId",
-                unique: true);
-        }
+			Enumeration.GetAll<TipoCampeonatoEnum>().ToList()
+				.ForEach(x =>
+					migrationBuilder.Sql($"INSERT INTO TipoCampeonato(Id, Nome)" +
+					$" VALUES({x.Id}, '{x.Nome}')"));
+		}
 
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -135,13 +139,13 @@ namespace WebCamp.Migrations
                 name: "CampeonatoTime");
 
             migrationBuilder.DropTable(
-                name: "TipoCampeonato");
+                name: "Campeonato");
 
             migrationBuilder.DropTable(
                 name: "Time");
 
             migrationBuilder.DropTable(
-                name: "Campeonato");
+                name: "TipoCampeonato");
         }
     }
 }

@@ -17,11 +17,6 @@ namespace WebCamp.Data.Mapping
 				.HasMaxLength(100)
 				.IsRequired();
 
-			builder.HasOne(x => x.TipoCampeonato)
-				.WithOne()
-				.HasForeignKey<TipoCampeonatoEnum>("TipoCampeonatoId")
-				.IsRequired();
-
 			builder.HasMany(x => x.Times)
 				.WithOne(y => y.Campeonato)
 				.HasForeignKey(y => y.CampeonatoId)

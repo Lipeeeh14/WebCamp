@@ -12,7 +12,7 @@ using WebCamp.Data;
 namespace WebCamp.Migrations
 {
     [DbContext(typeof(WebCampContext))]
-    [Migration("20231101001351_Initial")]
+    [Migration("20231102181521_Initial")]
     partial class Initial
     {
         /// <inheritdoc />
@@ -27,24 +27,18 @@ namespace WebCamp.Migrations
 
             modelBuilder.Entity("WebCamp.Domain.Enums.TipoCampeonatoEnum", b =>
                 {
-                    b.Property<long>("Id")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint");
+                        .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(40)
                         .HasColumnType("nvarchar(40)");
 
-                    b.Property<long>("TipoCampeonatoId")
-                        .HasColumnType("bigint");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("TipoCampeonatoId")
-                        .IsUnique();
 
                     b.ToTable("TipoCampeonato", (string)null);
                 });
@@ -110,6 +104,8 @@ namespace WebCamp.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("TipoCampeonatoId");
+
                     b.ToTable("Campeonato", (string)null);
                 });
 
@@ -155,15 +151,6 @@ namespace WebCamp.Migrations
                     b.ToTable("Time", (string)null);
                 });
 
-            modelBuilder.Entity("WebCamp.Domain.Enums.TipoCampeonatoEnum", b =>
-                {
-                    b.HasOne("WebCamp.Domain.Models.Campeonato", null)
-                        .WithOne("TipoCampeonato")
-                        .HasForeignKey("WebCamp.Domain.Enums.TipoCampeonatoEnum", "TipoCampeonatoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("WebCamp.Domain.Models.Atleta", b =>
                 {
                     b.HasOne("WebCamp.Domain.Models.Time", "Time")
@@ -173,6 +160,17 @@ namespace WebCamp.Migrations
                         .IsRequired();
 
                     b.Navigation("Time");
+                });
+
+            modelBuilder.Entity("WebCamp.Domain.Models.Campeonato", b =>
+                {
+                    b.HasOne("WebCamp.Domain.Enums.TipoCampeonatoEnum", "TipoCampeonato")
+                        .WithMany()
+                        .HasForeignKey("TipoCampeonatoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("TipoCampeonato");
                 });
 
             modelBuilder.Entity("WebCamp.Domain.Models.CampeonatoTime", b =>
@@ -193,9 +191,6 @@ namespace WebCamp.Migrations
             modelBuilder.Entity("WebCamp.Domain.Models.Campeonato", b =>
                 {
                     b.Navigation("Times");
-
-                    b.Navigation("TipoCampeonato")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("WebCamp.Domain.Models.Time", b =>

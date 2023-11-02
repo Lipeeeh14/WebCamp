@@ -9,7 +9,7 @@ namespace WebCamp.Domain.Models
         public DateTime? DataFim { get; private set; }
 
         public int TipoCampeonatoId { get; private set; }
-        public TipoCampeonatoEnum TipoCampeonato { get; private set; } = TipoCampeonatoEnum.MataMata;
+        public TipoCampeonatoEnum TipoCampeonato { get; private set; }
 
 		public ICollection<CampeonatoTime> Times { get; private set; } = new List<CampeonatoTime>();
 
